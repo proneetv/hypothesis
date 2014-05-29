@@ -11,6 +11,19 @@ This repository holds the files which were used to do a computational analysis f
 - Scattering from a potential
 - The Variational Method
 
+How to use:
+-----------
+
+To compile: 
+`gcc harmonic1.c -lm`
+
+Fill in whatever parameters you want with the file name and the data sheet would be generated with columns being:
+1) x
+2) parity * x
+3) probability distribution
+4) classical probability
+5) V Potential
+
 Algorithms used:
 ----------------
 
