@@ -6,7 +6,7 @@ Numerical methods in quantum mechanics
 
 This repository holds the files which were used to do a computational analysis for the following:
 
-- One dimensional Schrodinger Equation
+- Schrodinger Equations - Harmonic Oscillator, N degree potentials, Morse Potential
 - Schrodinger Equation for central potentials
 - Scattering from a potential
 - The Variational Method
