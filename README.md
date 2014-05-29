@@ -18,11 +18,11 @@ To compile:
 `gcc harmonic1.c -lm`
 
 Fill in whatever parameters you want with the file name and the data sheet would be generated with columns being:
-1) x
-2) parity * x
-3) probability distribution
-4) classical probability
-5) V Potential
+- x
+- parity * x
+- probability distribution
+- classical probability
+- V Potential
 
 Algorithms used:
 ----------------
