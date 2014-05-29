@@ -71,6 +71,7 @@ main()
         }
         break;
       default:
+        fprintf(stderr, "Invalid");
         break;
     }
     fprintf(stderr, "Output file name = ");
