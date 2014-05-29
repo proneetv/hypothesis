@@ -17,10 +17,11 @@ static double pi = 3.14159265358979323846;
 main()
 {
     double sqrt();
-
+    int option;
     int mesh, i, icl;
     int nodes, hnodes, ncross, parity, kkk, iterate;
     double xmax, dx, ddx12, xmcl, norm, arg, yicl, djump;
+    double epsilon, delta, a, D;
     double elw, eup, e;
     double *x, *y, *p, *vpot, *f;
     char fileout[80];
@@ -42,13 +43,35 @@ main()
     vpot = (double *) malloc( (mesh+1) * sizeof (double));
     dx = xmax / mesh;
     ddx12 = dx * dx / 12.;
-
+    fprintf(stderr, "1- harmonic, 2- polynomial of n-degree, 3- Morse potential: ");
+    scanf("%d",&option);
 
 /*  set up the potential (must be even w.r.t. x=0) */
-
-    for (i = 0; i <= mesh; ++i) {
-	x[i] = (double) i * dx;
-	vpot[i] = 0.5 * x[i] * x[i];
+    switch(option) {
+      case 1:
+        for (i = 0; i <= mesh; ++i) {
+      	  x[i] = (double) i * dx;
+	        vpot[i] = 0.5 * x[i] * x[i];
+        }
+        break;
+      case 2:
+        fprintf(stderr, "Enter 'epsilon' and 'delta' ");
+        scanf("%lf%lf",&epsilon,&delta);
+        for (i = 0; i <= mesh; ++i) {
+        	x[i] = (double) i * dx;
+	        vpot[i] = epsilon*((x[i]*x[i])/(delta*delta)*(2*(x[i]*x[i])/(delta*delta) - 1) + 1);
+        }
+        break;
+      case 3:
+        fprintf(stderr, "Enter 'a' and 'D': ");
+        scanf("%lf%lf",&a,&D);
+        for (i = 0; i <= mesh; ++i) {
+        	x[i] = (double) i * dx;
+	        vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
+        }
+        break;
+      default:
+        break;
     }
     fprintf(stderr, "Output file name = ");
     scanf("%80s", fileout);
