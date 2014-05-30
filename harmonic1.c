@@ -55,7 +55,7 @@ main()
         }
         break;
       case 2:
-        fprintf(stderr, "Enter 'epsilon' and 'delta' ");
+        fprintf(stderr, "Enter 'epsilon' and 'delta':\n");
         scanf("%lf%lf",&epsilon,&delta);
         for (i = 0; i <= mesh; ++i) {
         	x[i] = (double) i * dx;
@@ -63,7 +63,7 @@ main()
         }
         break;
       case 3:
-        fprintf(stderr, "Enter 'a' and 'D': ");
+        fprintf(stderr, "Enter 'a' and 'D': \n");
         scanf("%lf%lf",&a,&D);
         for (i = 0; i <= mesh; ++i) {
         	x[i] = (double) i * dx;
@@ -223,13 +223,14 @@ L999:	/* this is the entry point for a new eigenvalue search */
        }
 
     if ( iterate == 1 ||  ncross == nodes ) {
-/*
-     Number of crossings is correct, or energy is fixed:
-      proceed to inward integration 
 
-     Determination of the wave-function in the last two points 
-     assuming y(mesh+1) = 0
-*/
+//     Number of crossings is correct, or energy is fixed:
+//      proceed to inward integration 
+
+
+//     Determination of the wave-function in the last two points 
+//     assuming y(mesh+1) = 0
+
        y[mesh] = dx;
        y[mesh - 1] = (12. - 10.*f[mesh]) * y[mesh] / f[mesh-1];
 
@@ -281,6 +282,7 @@ L2:
 /*
    Calculation of the classical probability density for energy e:
 */
+    fprintf(stdout, "Value of fixed energy is: %25.15e\n", e);
     xmcl = sqrt(2. * e);
     norm = 0.;
     for (i = icl; i <= mesh; ++i) {
