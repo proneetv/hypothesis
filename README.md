@@ -27,10 +27,10 @@ Fill in whatever parameters you want with the file name and the data sheet would
 Algorithms used:
 ----------------
 
-Numerov Method
-Bisection Method
-Newton-Raphson Method
-Secant Method
+- Numerov Method
+- Bisection Method
+- Newton-Raphson Method
+- Secant Method
 
 TODO:
 -----
