@@ -29,10 +29,6 @@ main()
 
 /*  Read input data */
 
-//    fprintf(stderr, "Max value of x (typical value: 10) ? ");
-//  scanf("%lf",&xmax);
-//    fprintf(stderr, "Number of grid points (typically a few hundreds) ? " );
-//  scanf("%d",&mesh);
 	xmax = 10;
 	mesh = 300;
 /*  Allocate arrays (from 0 to mesh), Initialize grid */
@@ -44,8 +40,6 @@ main()
     vpot = (double *) malloc( (mesh+1) * sizeof (double));
     dx = xmax / mesh;
     ddx12 = dx * dx / 12.;
-//    fprintf(stderr, "1- harmonic, 2- polynomial of n-degree, 3- Morse potential: ");
-//    scanf("%d",&option);
 	option = 1;
 /*  set up the potential (must be even w.r.t. x=0) */
     switch(option) {
@@ -87,8 +81,6 @@ L999:	/* this is the entry point for a new eigenvalue search */
 
 /*  Read number of nodes (stop if < 0) */
 
-//    fprintf(stderr, "Number of nodes (-1=exit) ? ");
-//    scanf("%d",&nodes);
     if (nodes < 0 || nodes > totalNodes) {
         free(vpot); free(f); free(p); free(y); free(x);
         fclose(out);
@@ -108,9 +100,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
 
 /*  set trial energy */
 
-//    fprintf(stderr, "Trial energy (0=search with bisection) ? ");
 	e=0;
-  //  scanf("%lf", &e);
     if (e == 0.) { /* search eigenvalues with bisection (max 1000 iterations) */
 	e = 0.5 * (elw + eup);
 	iterate = 1000;
@@ -281,7 +271,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
 	  e = 0.5 * (eup + elw);
        }
     } /* end if (ncross==nodes) */
-    } /* end do /*
+    } /* end do */
 
 /* ---- convergence has been achieved (or it wasn't required) ---- */
 L2:
@@ -314,13 +304,9 @@ L2:
     else
         parity = -1;
     for (i = mesh; i >= 1; --i) {
-      //  fprintf(out, "%7.3f%16.8e%16.8e%16.8e%12.6f\n",
-//		-x[i], parity*y[i], y[i]*y[i], p[i], vpot[i]);
     }
 /* x>0 region: */
     for (i = 0; i <= mesh; ++i) {
-  //      fprintf(out, "%7.3f%16.8e%16.8e%16.8e%12.6f\n",
-//		x[i], y[i], y[i]*y[i], p[i], vpot[i]);
     }
     nodes++;
     goto L999;
