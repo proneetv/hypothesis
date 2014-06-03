@@ -275,7 +275,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
 	  e = 0.5 * (eup + elw);
        }
     } /* end if (ncross==nodes) */
-    } /* end do /*
+    } /* end do */
 
 /* ---- convergence has been achieved (or it wasn't required) ---- */
 L2:
