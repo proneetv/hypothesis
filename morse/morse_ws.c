@@ -65,11 +65,15 @@ main()
       case 3:
         fprintf(stderr, "Enter 'a' and 'D': \n");
         scanf("%lf%lf",&a,&D);
-        for (i = 0; i <= mesh; ++i) {
-        	x[i] = (double)(i - mesh/2) * dx;
-	        vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
+        for (i = 0; i <= mesh/2; ++i) {
+                x[i] = (double) i * dx;
+                vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
         }
-        break;
+        for (i = mesh; i >= mesh/2+1; --i) {
+                x[i] = (double) (i-(mesh)) * dx;
+                vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
+        }
+	break;
       default:
         fprintf(stderr, "Invalid");
         break;
@@ -92,9 +96,9 @@ L999:	/* this is the entry point for a new eigenvalue search */
 
 /*  set initial lower and upper bounds to the eigenvalue */
 
-    eup = vpot[mesh];
+    eup = vpot[0];
     elw = eup;
-    for (i = mesh/2; i <= mesh; ++i) {
+    for (i = 0; i <= mesh; ++i) {
         if ( vpot[i] < elw )
             elw = vpot[i];
         if ( vpot[i] > eup )
@@ -108,8 +112,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
     if (e == 0.) { /* search eigenvalues with bisection (max 1000 iterations) */
 	e = 0.5 * (elw + eup);
 	iterate = 1000;
-    } 
-    else {	   /*  test a single energy value */
+    } else {	   /*  test a single energy value */
 	iterate = 1;
     }
 
@@ -123,7 +126,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
 */
        f[0] = ddx12 * (2.*(vpot[0] - e));
        icl = -1;
-       for (i = 1; i <= mesh; ++i) { // ASK: why 1?
+       for (i = 1; i <= mesh; ++i) {
           f[i] = ddx12 * 2. * (vpot[i] - e);
 /*
      beware: if f(i) is exactly zero the change of sign is not observed
@@ -169,19 +172,19 @@ L999:	/* this is the entry point for a new eigenvalue search */
   
        if (2*hnodes == nodes) {
           /*  even number of nodes: wavefunction is even  */
-	  y[mesh/2] = 1.;
+	  y[0] = 1.;
           /*  assume f(-1) = f(1)  */
-	  y[mesh/2 + 1] = 0.5 * (12. - f[mesh/2] * 10.) * y[mesh/2] / f[mesh/2 + 1];
+	  y[1] = 0.5 * (12. - f[0] * 10.) * y[0] / f[1];
        } else {
           /*  odd  number of nodes: wavefunction is odd   */
-	  y[mesh/2] = 0.;
-	  y[mesh/2 + 1] = dx;
+	  y[0] = 0.;
+	  y[1] = dx;
        }
 
 /*   Outward integration and count number of crossings  */
 
        ncross = 0;
-       for (i = mesh/2 + 1; i <= icl-(mesh/2 + 1); ++i) {
+       for (i = 1; i <= icl-1; ++i) {
           y[i + 1] = ((12. - f[i] * 10.) * y[i] - f[i - 1] * y[i - 1])
 		 / f[i + 1];
           if (y[i] != copysign(y[i],y[i+1]))
@@ -192,8 +195,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
        if (2*hnodes == nodes) {
           /* even number of nodes: no node in x=a 0*/
           ncross = 2*ncross;
-       } 
-       else {
+       } else {
           /*  odd number of nodes:    node in x=0 */
           ncross = 2*ncross+1;
        }
@@ -237,7 +239,7 @@ L999:	/* this is the entry point for a new eigenvalue search */
        y[mesh - 1] = (12. - 10.*f[mesh]) * y[mesh] / f[mesh-1];
 
 /*	Inward integration */
-       for (i = mesh - (mesh/2 + 1); i >= icl+1; --i) {
+       for (i = mesh - 1; i >= icl+1; --i) {
           y[i-1] = ((12. - 10.*f[i]) * y[i] - f[i+1] * y[i+1]) / f[i-1];
        }
 
@@ -251,19 +253,19 @@ L999:	/* this is the entry point for a new eigenvalue search */
 /*      normalize on the [-xmax,xmax] segment  */
 
        norm = 0.;
-       for (i = mesh/2 + 1; i <= mesh; ++i) {
+       for (i = 1; i <= mesh/2; ++i) {
            norm += y[i]*y[i];
        }
        norm = dx * (2.* norm + y[0]*y[0]);
        norm = sqrt(norm);
-       for (i = mesh/2; i <= mesh; ++i) {
+       for (i = 0; i <= mesh/2; ++i) {
            y[i] /= norm;
        }
 
 /* 	calculate the discontinuity in the first derivative 
               y'(i;RIGHT) - y'(i;LEFT)         */
 
-       if (iterate > (mesh/2 + 1)) {
+       if (iterate > 1) {
           i = icl;
           djump = (y[i+1] + y[i-1] - (14. - 12.*f[i]) * y[i]) / dx;
           fprintf(stdout, "%5d%25.15e%5d%14.8f\n", kkk, e, nodes, djump);
@@ -290,7 +292,7 @@ L2:
     for (i = icl; i <= mesh; ++i) {
 	p[i] = 0.;
     }
-    for (i = mesh/2; i <= icl - (mesh/2 + 1); ++i) {
+    for (i = 0; i <= icl - 1; ++i) {
 	arg = xmcl*xmcl - x[i]*x[i];
         if ( arg > 0.) 
            p[i] = 1. / sqrt(arg) / pi;
@@ -299,17 +301,17 @@ L2:
 	norm += dx * 2. * p[i];
     }
 /* The point at x=0 must be counted once: */
-    norm -= dx * p[mesh/2];
+    norm -= dx * p[0];
 /* Normalize p(x) so that  Int p(x)dx = 1: */
-    for (i = mesh/2; i <= icl - (mesh/2 + 1); ++i) {
+    for (i = 0; i <= icl - 1; ++i) {
 	p[i] /= norm;
     }
 /* x<0 region: */
-    if (hnodes << (mesh/2 + 1) == nodes)
+    if (hnodes << 1 == nodes)
         parity = +1;
     else
         parity = -1;
-    for (i = mesh; i >= (mesh/2 + 1); --i) {
+    for (i = mesh; i >= mesh/2; --i) {
         fprintf(out, "%7.3f%16.8e%16.8e%16.8e%12.6f\n",
 		-x[i], parity*y[i], y[i]*y[i], p[i], vpot[i]);
     }

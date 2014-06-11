@@ -1,0 +1,8 @@
+for (i = 0; i <= mesh/2; ++i) {
+                x[i] = (double) i * dx;
+                vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
+        }
+        for (i = mesh; i >= mesh/2+1; --i) {
+                x[i] = (double) (i-(mesh)) * dx;
+                vpot[i] = D * (exp(-2*a*x[i]) - 2*exp(-1*a*x[i]) + 1);
+        }
